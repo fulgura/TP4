@@ -12,10 +12,11 @@ maxgen   = 500;         % max. cant.de generaciones
 NroClase = 1;           % Clase a procesar
 
 %% Generacion de los datos originales
-%Matriz de datos codificada en numerico de longitud fija
-Datos = [2,2,2,1;
-    2,1,2,0;
-    3,2,2,1;
+%Matriz de datos codificada en numerico de longitud fija 
+
+Datos = [2,2,2,1; % bien,       alta,   alta,   aprobado
+    2,1,2,0;      % bien,       baja,   alta,   desaprobado
+    3,2,2,1;      % muy_bien,   alta,   alta,   aprobado 
     1,2,2,1;
     1,2,1,0;
     1,1,1,0;
@@ -30,13 +31,16 @@ Datos = [2,2,2,1;
 
 
 %% Generamos una problacion valida
-Pop = GenerarPoblacion(lchrom, popsize);
+Pop = GenerarPoblacion(lchrom, popsize)
 
 
 %% Evaluamos las reglas donde el consecuente es aprobado.
 % calculo el soporte y la confianza para cada reglas
+
 Soporte = CalcularSoporte(Datos, Pop); %sobre aprobados
+
 Confianza = CalcularConfianza(Datos, Pop, NroClase);
+
 % Medida de aptitud : promedio entre el soporte y la confianza
 Fitness = (Soporte + Confianza) ./2
 

@@ -1,15 +1,15 @@
 function [ Soporte ] = CalcularSoporte( Datos, Reglas )
-%CALCULARSOPORTE Summary of this function goes here
+%CALCULARSOPORTE Calculo del soprte para las Reglas en la variable Datos
 %
 % El 'soporte' de un conjunto de items X en una base de datos D se define
-% como la proporci?n de transacciones en la base de datos que contiene dicho conjunto de items:
+% como la proporcion de transacciones en la base de datos que contiene dicho conjunto de items:
 %
 %   SOP(X) = |X| / |D|
 %             
 
 [CantidadFilas, CantidadColumnas] = size(Datos);
-CantidadReglas = length(Reglas);
 
+CantidadReglas = length(Reglas);
 
 Soporte = zeros(1, CantidadReglas);
 

@@ -1,6 +1,13 @@
 function [ Pop ] = GenerarPoblacion( lchrom, popsize)
-%GENERARPOBLACION Summary of this function goes here
-%   Detailed explanation goes here
+%GENERARPOBLACION Crea una poblaci?n aleatoria 
+%                 utilizando una codifiaci?n entera de longitud fija.
+%
+%   Representaci?n de cada una de las variables:
+%
+%       Practica         = {no-aplica = 0, regular = 1, bien = 2, muy_bien =  3}
+%       Activ-Distancia  = {no-aplica = 0, baja = 1, alta = 2}
+%       Activ-Presencial = {no-aplica = 0, baja = 1, alta = 2}
+%
 
 Pop = zeros(lchrom, popsize);
 

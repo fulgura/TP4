@@ -4,8 +4,8 @@ function [ Confianza ] = CalcularConfianza( Datos, Reglas, NroClase)
 %
 % La 'confianza' de una regla se define como:
 %
-%   CON(X ==> Y) = SOP(X U Y) / SOP(X) 
-%                = |X U Y| / |X|   
+%   CON(X ==> Y) = SOP(X U Y) / SOP(X)  = |X U Y| / |X|  
+%                
 
 [CantidadFilas, CantidadColumnas] = size(Datos);
 CantidadReglas = length(Reglas);
