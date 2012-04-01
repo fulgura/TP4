@@ -11,7 +11,7 @@ pmutation = 0;          % probabilidad de mutacion
 maxgen   = 500;         % max. cant.de generaciones
 NroClase = 1;           % Clase a procesar
 filename = 'Ejercicio1.csv'; % Archivo con los resultados obtenidos.
-
+separador = [NaN NaN NaN]'; % Separador utilizado para imprimir datos
 
 %% Generacion de los datos originales
 %Matriz de datos codificada en numerico de longitud fija
@@ -55,7 +55,6 @@ dlmwrite(filename ,Fitness, 'delimiter', '\t', '-append');
 
 for ite = 1 : 3
     
-    ite
     [OrdenFitness Indices] = sort(Fitness, 2, 'descend');
     
     %% Elegimos las dos mejores reglas
@@ -65,14 +64,8 @@ for ite = 1 : 3
     mejorRegla1 = Pop(:, primerPos);
     mejorRegla2 = Pop(:, segundaPos);
     
-    mejorRegla1'
-    mejorRegla2'
-    
     
     [h1, h2] = CruzarMutar(Pop, Indices(1), Indices(2), pcross, pmutation);
-    
-    h1'
-    h2'
     
     %% Elegimos las dos peores reglas
     ultimaPos = Indices(popsize);
@@ -81,27 +74,29 @@ for ite = 1 : 3
     peorRegla1 = Pop(:, ultimaPos);
     peorRegla2 = Pop(:, anteultimaPos);
     
+    
     %% Reemplazamos en la problacion los nuevos valores
     Pop(:, ultimaPos) = h1;
     Pop(:, anteultimaPos) = h2;
     % Actualizamos la salida con la nueva poblacion
-    dlmwrite(filename ,Pop, 'delimiter', '\t', '-append');
     
     %% Evaluamos las reglas donde el consecuente es aprobado.
     % calculo el soporte y la confianza para cada reglas
     
     Soporte = CalcularSoporte(Datos, Pop); %sobre aprobados
-    dlmwrite(filename ,Soporte, 'delimiter', '\t', '-append');
     
     Confianza = CalcularConfianza(Datos, Pop, NroClase);
-    dlmwrite(filename ,Confianza, 'delimiter', '\t', '-append');
     %% Medida de aptitud : promedio entre el soporte y la confianza
     Fitness = (Soporte + Confianza) ./2;
-    dlmwrite(filename ,Fitness, 'delimiter', '\t', '-append');
     %% Validar reglas ??
     
+    dlmwrite(filename , [ [NaN ite NaN]' mejorRegla1 mejorRegla2 separador peorRegla1 peorRegla2 separador h1 h2], 'delimiter', '\t', '-append');
+    dlmwrite(filename ,Pop, 'delimiter', '\t', '-append');
+    dlmwrite(filename ,Soporte, 'delimiter', '\t', '-append');
+    dlmwrite(filename ,Confianza, 'delimiter', '\t', '-append');
+    dlmwrite(filename ,Fitness, 'delimiter', '\t', '-append');
+
     
-    dlmwrite(filename ,'', 'delimiter', '\t', '-append');
 end
 
 
