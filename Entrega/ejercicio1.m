@@ -34,28 +34,24 @@ Datos = [2,2,2,1; % bien,       alta,   alta,   aprobado
 
 %% Generamos una problacion valida
 Pop = GenerarPoblacion(lchrom, popsize);
-
 dlmwrite(filename ,Pop,'delimiter','\t');
 
 %% Evaluamos las reglas donde el consecuente es aprobado.
 % calculo el soporte y la confianza para cada reglas
-
-Soporte = CalcularSoporte(Datos, Pop); %sobre aprobados
-dlmwrite(filename ,Soporte, 'delimiter', '\t', '-append');
-
-Confianza = CalcularConfianza(Datos, Pop, NroClase);
-dlmwrite(filename ,Confianza, 'delimiter', '\t', '-append');
-
 % Medida de aptitud : promedio entre el soporte y la confianza
-Fitness = (Soporte + Confianza) ./2;
-dlmwrite(filename ,Fitness, 'delimiter', '\t', '-append');
+[Soporte, Confianza, Aptitud] = Fitness(Datos(:,1:3), Pop, Datos(:,4), NroClase);
+
+
+dlmwrite(filename ,Soporte, 'delimiter', '\t', '-append');
+dlmwrite(filename ,Confianza, 'delimiter', '\t', '-append');
+dlmwrite(filename ,Aptitud, 'delimiter', '\t', '-append');
 
 
 %% Iteraciones
 
 for ite = 1 : 3
     
-    [OrdenFitness Indices] = sort(Fitness, 2, 'descend');
+    [OrdenFitness Indices] = sort(Aptitud, 2, 'descend');
     
     %% Elegimos las dos mejores reglas
     primerPos = Indices(1);
@@ -65,7 +61,11 @@ for ite = 1 : 3
     mejorRegla2 = Pop(:, segundaPos);
     
     
-    [h1, h2] = CruzarMutar(Pop, Indices(1), Indices(2), pcross, pmutation);
+    [h1, h2] = CruzarMutar(Pop, ...
+        Indices(1), ...
+        Indices(2), ...
+        pcross, ...
+        pmutation);
     
     %% Elegimos las dos peores reglas
     ultimaPos = Indices(popsize);
@@ -80,22 +80,24 @@ for ite = 1 : 3
     Pop(:, anteultimaPos) = h2;
     % Actualizamos la salida con la nueva poblacion
     
-    %% Evaluamos las reglas donde el consecuente es aprobado.
-    % calculo el soporte y la confianza para cada reglas
+    [Soporte, Confianza, Aptitud] = Fitness(Datos(:,1:3), Pop, Datos(:,4), NroClase);
     
-    Soporte = CalcularSoporte(Datos, Pop); %sobre aprobados
+    dlmwrite(filename , [ [NaN ite NaN]' ...
+        mejorRegla1 mejorRegla2 ...
+        separador ...
+        h1 h2...
+        separador ...
+        separador ...
+        peorRegla1 peorRegla2], ...
+        'delimiter', ...
+        '\t', ...
+        '-append');
     
-    Confianza = CalcularConfianza(Datos, Pop, NroClase);
-    %% Medida de aptitud : promedio entre el soporte y la confianza
-    Fitness = (Soporte + Confianza) ./2;
-    %% Validar reglas ??
-    
-    dlmwrite(filename , [ [NaN ite NaN]' mejorRegla1 mejorRegla2 separador peorRegla1 peorRegla2 separador h1 h2], 'delimiter', '\t', '-append');
     dlmwrite(filename ,Pop, 'delimiter', '\t', '-append');
     dlmwrite(filename ,Soporte, 'delimiter', '\t', '-append');
     dlmwrite(filename ,Confianza, 'delimiter', '\t', '-append');
-    dlmwrite(filename ,Fitness, 'delimiter', '\t', '-append');
-
+    dlmwrite(filename ,Aptitud, 'delimiter', '\t', '-append');
+    
     
 end
 
