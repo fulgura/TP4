@@ -3,12 +3,12 @@ function [ Pop, Fitness, Soporte, Confianza] = Reglas( Datos, lchrom, popsize, p
 
 CantCols = size(Datos, 2);
 Clase = Datos(:, CantCols);
-Datos = discretizar(Datos(:, 1:CantCols-1), numintervalos);
+Datos = Discretizar(Datos(:, 1:CantCols-1), numintervalos);
 prob = 0.7;
 
 % 1. Genero la poblacion con valores random. una matriz de 20x3 = popsizexlchrom
-Pop = generar_poblacion(popsize, lchrom);
-Pop = discretizar(Pop, numintervalos);
+Pop = GenerarPoblacion(popsize, lchrom);
+Pop = Discretizar(Pop, numintervalos);
 
 % 2. Valido que las reglas sean validas, si no es asi las corrijo
 Pop = validar_reglas(Pop, numintervalos);
